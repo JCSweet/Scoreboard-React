@@ -1,0 +1,36 @@
+.PlayerCard {
+  /* border: 1px solid whitesmoke;
+  border-radius: 4px; */
+  padding: 20px;
+  display: flex;
+  flex: 1;
+  /* flex-basis: 50%; */
+  flex-direction: column;
+  justify-content: space-around;
+}
+.PlayerCardMenu,
+.PlayerCardScoreButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.PlayerCardMenu button {
+    font-size: 1.8em;
+    font-weight: bold;
+    padding: 0;
+}
+.RemovePlayerButton {
+    background-color: transparent;
+    border: none;
+}
+
+@media (min-width: 500px) {
+    .PlayerCard {
+        padding: 40px;
+    }
+    .PlayerCardScoreButtons button {
+        font-size: 1.5rem;
+    }
+}
