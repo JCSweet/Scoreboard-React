@@ -33,6 +33,7 @@ export default function ScoreTrackerPlayer({
     setBgColor(randomChoice(colors));
   };
 
+
   return (
     <div
       className="PlayerCard"

@@ -7,8 +7,21 @@ export default function ScoreTracker() {
   const [scoreSheet, setScoreSheet] = useState([
     { id: crypto.randomUUID(), playerNumber: 1, playerName: "", score: 0 },
     { id: crypto.randomUUID(), playerNumber: 2, playerName: "", score: 0 },
+    // { id: crypto.randomUUID(), playerNumber: 3, playerName: "", score: 0 },
   ]);
 
+  // Changes Flex-direction based on number of players for ideal layout
+  const [twoPlayer, setTwoPlayer] = useState(true);
+
+  const isTwoPlayer = () => {
+    if (scoreSheet.length > 1) {
+      setTwoPlayer(false);
+    } else {
+      setTwoPlayer(true);
+    }
+  };
+
+  // Modify Scores
   const addScore = (id) => {
     setScoreSheet((priorScores) => {
       return priorScores.map((scores) => {
@@ -39,6 +52,21 @@ export default function ScoreTracker() {
     });
   };
 
+  // JS Media Queries
+  const isLargeScreen = useMediaQuery({ minWidth: 1024 });
+  // const isMediumScreen = useMediaQuery({ minWidth: 900, maxWidth: 1024 });
+  const isMediumScreen = useMediaQuery({ minWidth: 768, maxWidth: 1023 });
+  const isPortrait = useMediaQuery({ orientation: "portrait" });
+
+  let maxPlayers = 4;
+
+  if (isMediumScreen && isPortrait) {
+    maxPlayers = 6;
+  } else if (isLargeScreen) {
+    maxPlayers = 8;
+  }
+
+  // Add Player
   const newPlayerNumber = () => {
     for (let i = 1; i <= scoreSheet.length + 1; i++) {
       if (!scoreSheet.some((p) => p.playerNumber === i) && !isNaN(i)) {
@@ -58,37 +86,38 @@ export default function ScoreTracker() {
   };
 
   const newPlayer = () => {
-    if (scoreSheet.length < 12) {
-      setScoreSheet((priorScores) => {
-        return [
-          ...priorScores,
-          {
-            id: crypto.randomUUID(),
-            playerNumber: newPlayerNumber(),
-            playerName: "",
-            score: 0,
-          },
-        ];
-      });
-    }
+    setScoreSheet((priorScores) => {
+      return [
+        ...priorScores,
+        {
+          id: crypto.randomUUID(),
+          playerNumber: newPlayerNumber(),
+          playerName: "",
+          score: 0,
+        },
+      ];
+    });
   };
 
   const addPlayer = () => {
-    newPlayer();
-    sortPlayers();
+    if (scoreSheet.length < maxPlayers) {
+      newPlayer();
+      isTwoPlayer();
+      sortPlayers();
+    }
   };
 
+  // Delete Player
   const deletePlayer = (id) => {
     setScoreSheet((priorScores) => {
       return priorScores.filter((p) => p.id !== id);
     });
   };
 
-  const ScreenSize = () => {
-    const isLargeScreen = useMediaQuery({ query: "(min-width: 1024px)" });
-    const isMediumScreen = useMediaQuery({ query: "(min-width: 500px)" });
-    const isSmallScreen = useMediaQuery({ query: "(max-width: 500px)" });
-    const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+  // Need to update this because 'await' is not working 
+  const removePlayer = async (id) => {
+    await deletePlayer(id);
+    await isTwoPlayer();
   };
 
   return (
@@ -102,14 +131,17 @@ export default function ScoreTracker() {
           <button onClick={resetScore}>Reset</button>
         </div>
       </div>
-      <div className="PlayerBoard">
+      <div
+        className="PlayerBoard"
+        style={{ flexDirection: twoPlayer ? "column" : "row" }}
+      >
         {scoreSheet.map((scores) => (
           <ScoreboardPlayer
             key={scores.id}
             scores={scores}
             plusScore={addScore}
             minusScore={subtractScore}
-            removePlayer={deletePlayer}
+            removePlayer={removePlayer}
           />
         ))}
       </div>
