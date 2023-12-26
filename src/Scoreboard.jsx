@@ -44,8 +44,8 @@ export default function ScoreTracker() {
   };
 
   // JS Media Queries
-  const isLargeScreen = useMediaQuery({ minWidth: 1024 });
-  // const isMediumScreen = useMediaQuery({ minWidth: 900, maxWidth: 1024 });
+  const isFullScreen = useMediaQuery({ minWidth: 1400 });
+  const isLargeScreen = useMediaQuery({ minWidth: 1024, maxWidth: 1399 });
   const isMediumScreen = useMediaQuery({ minWidth: 768, maxWidth: 1023 });
   const isPortrait = useMediaQuery({ orientation: "portrait" });
 
@@ -55,6 +55,8 @@ export default function ScoreTracker() {
     maxPlayers = 6;
   } else if (isLargeScreen) {
     maxPlayers = 8;
+  } else if (isFullScreen) {
+    maxPlayers = 12;
   }
 
   // Add Player
