@@ -7,19 +7,10 @@ export default function ScoreTracker() {
   const [scoreSheet, setScoreSheet] = useState([
     { id: crypto.randomUUID(), playerNumber: 1, playerName: "", score: 0 },
     { id: crypto.randomUUID(), playerNumber: 2, playerName: "", score: 0 },
-    // { id: crypto.randomUUID(), playerNumber: 3, playerName: "", score: 0 },
   ]);
 
-  // Changes Flex-direction based on number of players for ideal layout
+  // twoPlayer state used to change Flex-direction based on number of players for ideal layout
   const [twoPlayer, setTwoPlayer] = useState(true);
-
-  const isTwoPlayer = () => {
-    if (scoreSheet.length > 1) {
-      setTwoPlayer(false);
-    } else {
-      setTwoPlayer(true);
-    }
-  };
 
   // Modify Scores
   const addScore = (id) => {
@@ -101,9 +92,14 @@ export default function ScoreTracker() {
 
   const addPlayer = () => {
     if (scoreSheet.length < maxPlayers) {
-      newPlayer();
-      isTwoPlayer();
-      sortPlayers();
+      if (scoreSheet.length >= 2) {
+        setTwoPlayer(false);
+        newPlayer();
+        sortPlayers();
+      } else {
+        newPlayer();
+        sortPlayers();
+      }
     }
   };
 
@@ -114,10 +110,12 @@ export default function ScoreTracker() {
     });
   };
 
-  // Need to update this because 'await' is not working 
-  const removePlayer = async (id) => {
-    await deletePlayer(id);
-    await isTwoPlayer();
+  const removePlayer = (id) => {
+    if (scoreSheet.length <= 3) {
+      setTwoPlayer(true);
+      deletePlayer(id);
+    }
+    deletePlayer(id);
   };
 
   return (

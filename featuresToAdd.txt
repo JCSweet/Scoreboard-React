@@ -1,7 +1,4 @@
 
 
-Async function to recheck numPlayers on player delete to re-check for flex-direction 
-
-
 Alert when maxPlayers is reached
 
