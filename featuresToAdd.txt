@@ -1,4 +1,13 @@
 
+Instructions? 
+    - max players
+    - changing player color
+
 
 Alert when maxPlayers is reached
+
+Full screen mode 
+
+
+
 
